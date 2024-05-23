@@ -1,0 +1,6 @@
+@StoreAPI_HostAddress = http://localhost:5192
+
+GET {{StoreAPI_HostAddress}}/Category/
+Accept: application/json
+
+###
