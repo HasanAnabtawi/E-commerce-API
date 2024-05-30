@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ namespace StoreAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class ProductController : ControllerBase
     {
 
@@ -22,7 +24,7 @@ namespace StoreAPI.Controllers
 
 
 
-        [HttpGet]
+        [HttpGet,Authorize]
         public async Task<IEnumerable<ProductModelDTO>> ProductGet()
         {
 

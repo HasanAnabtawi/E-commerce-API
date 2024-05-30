@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StoreAPI.Data;
@@ -6,6 +8,8 @@ using StoreAPI.Models;
 
 namespace StoreAPI.Controllers
 {
+
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
@@ -49,6 +53,8 @@ namespace StoreAPI.Controllers
         public async Task<ActionResult<CategoryModelDTO>> GetCategoryItem(int id)
         {
             var categoryItem = await _db.Categories.FindAsync(id);
+
+            
 
             if (categoryItem == null)
             {
