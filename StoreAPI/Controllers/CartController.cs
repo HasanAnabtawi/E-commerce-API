@@ -109,12 +109,12 @@ namespace StoreAPI.Controllers
 
 
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public ActionResult DeleteCartItem(int id)
         {
 
 
-            var user = _db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            
             var cartItem= _db.Carts.FirstOrDefault(x=>x.Id==id);
 
 

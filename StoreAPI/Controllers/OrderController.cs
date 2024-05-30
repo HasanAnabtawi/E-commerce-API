@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StoreAPI.Data;
@@ -13,11 +14,12 @@ namespace StoreAPI.Controllers
     public class OrderController : ControllerBase
     {
 
-
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _db;
-        public OrderController(ApplicationDbContext db) {
+        public OrderController(ApplicationDbContext db, UserManager<IdentityUser> userManager) {
         
         _db= db;
+        _userManager= userManager;
 
         
         }
@@ -26,14 +28,40 @@ namespace StoreAPI.Controllers
 
         [HttpGet]
         public List<OrderModel> GetOrder()
+
         {
-           var orders= _db.Orders.Include(order=>order.OrderItems).ToList();
 
 
-            return orders;
+            var user = _db.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            
+
+
+            if(User.IsInRole("Admin") ) {
+
+
+                var orders = _db.Orders.Include(order => order.OrderItems).ToList();
+                return orders;
+
+            }
+
+            else
+            {
+                var orders = _db.Orders.Where(x=>x.UserId==user.Id).Include(order => order.OrderItems).ToList();
+                return orders;
+            }
+            
+
+
+            
 
 
         }
+
+
+
+
+
 
 
         
@@ -44,7 +72,7 @@ namespace StoreAPI.Controllers
 
 
 
-        [HttpPost("CartCheckout")]
+        [HttpPost]
         public ActionResult<OrderModel> CartCheckout()
         {
 
@@ -104,6 +132,35 @@ namespace StoreAPI.Controllers
             return Ok();
 
         }
+
+
+        [HttpDelete("{id}")]
+        public ActionResult orderDelete(int id)
+        {
+
+
+            if (User.IsInRole("Admin"))
+            {
+
+
+                var order = _db.Orders.Include(x=>x.OrderItems).FirstOrDefault(u => u.Id == id);
+                 
+
+
+
+              
+
+                _db.Orders.Remove(order);
+                _db.SaveChanges();
+                return Ok();
+            }
+            return Unauthorized();
+
+        }
+
+
+
+
 
 
 
