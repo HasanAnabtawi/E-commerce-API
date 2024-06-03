@@ -24,7 +24,7 @@ namespace StoreAPI.Controllers
 
 
 
-        [HttpGet,Authorize]
+        [HttpGet]
         public async Task<IEnumerable<ProductModelDTO>> ProductGet()
         {
 
@@ -40,13 +40,14 @@ namespace StoreAPI.Controllers
             return query;
         }
 
-            
-
-            
-        
 
 
 
+
+
+
+
+        [Authorize(Roles ="Admin")]
         [HttpPost]
         public async Task<ActionResult<ProductModelDTO>> ProductAdd(ProductModelDTO productDTO)
         {
@@ -100,10 +101,10 @@ namespace StoreAPI.Controllers
 
 
 
-    
 
 
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {

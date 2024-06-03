@@ -9,7 +9,7 @@ using StoreAPI.Models;
 namespace StoreAPI.Controllers
 {
 
-    [Authorize]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
@@ -22,7 +22,7 @@ namespace StoreAPI.Controllers
             _db = db;
 
         }
-
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryModel>>> CategoryGet()
         {
@@ -30,7 +30,7 @@ namespace StoreAPI.Controllers
         }
 
 
-
+        [Authorize(Roles ="Admin")]
         [HttpPost]
         public async Task<ActionResult<CategoryModelDTO>> CategoryAdd(CategoryModelDTO categoryDTO)
         {
@@ -48,7 +48,7 @@ namespace StoreAPI.Controllers
         }
 
 
-
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryModelDTO>> GetCategoryItem(int id)
         {
@@ -75,7 +75,7 @@ namespace StoreAPI.Controllers
       };
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
